@@ -1,1 +1,15 @@
-测试01!@#
+<?xml version="1.0" encoding="GBK"?>
+<root>
+ <head>
+  <transcode>T0005</transcode>
+  <transdate>20180510</transdate>
+  <transtime>165652</transtime>
+ </head>
+ <body>
+  <workdate>20180510</workdate>
+  <totalcnt>10</totalcnt>
+  <currpage>0</currpage>
+  <note1></note1>
+  <note2></note2>
+ </body>
+</root>

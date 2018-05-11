@@ -1,42 +1,63 @@
-const aseutil = require('./aesutil.js');
 const fs = require('fs');
 const path = require('path');
 const assert = require('assert');
+const aesutil = require('../utils/aesutil');
+const config = require('./config')
+
+const key = config.key;
+const iv = config.iv;
+
+// let readstream = fs.createReadStream(path.resolve(__dirname + '/data'));
+let data = fs.readFileSync(path.resolve(__dirname + '/data'), 'utf-8');
+
+let hashkey = aesutil.maphash(key);
+let hashiv = aesutil.maphash(iv, config.addalgorithm);
+
+encryption = aesutil.encryption(data, hashkey, hashiv);
+console.log("base64 ciphertext: " + encryption);
 
 
-// var data = "测试01!@#";
-var readstream = fs.createReadStream(path.resolve(__dirname + '/data'))
-var data = [];
-readstream.on('data', function (chunk) {
-    data.push(chunk.toString());
-})
-readstream.on('end', function () {
-    console.log('final output: ' + data);
-    data = data.toString();
-    assert.equal(typeof data, 'string');
 
-    var key = "RwcmlVpg";
-    var iv = "4e5Wa71fYoT7MFEX1";       
-    var hashkey = aseutil.maphash(key);
-    var hashiv = aseutil.maphash(iv, 'MD5');
-    
-    var encryption = aseutil.encryption(data, hashkey, hashiv);
-    console.log( "base64 ciphertext: "+ encryption);
+// DECRYPT = {
+//     encryption: aesutil.encryption(data, hashkey, hashiv),
+//     decryption: aesutil.encryption(data, hashkey, hashiv)
+// }
 
-    var decryption = aseutil.decryption(encryption, hashkey, hashiv);
-    console.log( "UTF8 plaintext deciphered: " + decryption);
-    
-})
+// module.exports = DECRPYT;
 
-// var key = "RwcmlVpg";
-// var iv = "4e5Wa71fYoT7MFEX1";       
+// let data = [];
+// let encryption = '';
 
-// var hashkey = aseutil.maphash(key);
+// readstream.on('data', function (chunk) {
+//     data.push(chunk.toString());
+// })
 
-// var hashiv = aseutil.maphash(iv, 'MD5');
+// readstream.on('end', function () {
+//     console.log('final output: ' + data);
+//     // data = data.toString();
+//     // assert.equal(typeof data, 'string');
 
-// var encryption = aseutil.encryption(data, hashkey, hashiv);
-// console.log( "base64 ciphertext: "+ encryption);
+//     // const key = config.key;
+//     // const iv = config.iv;       
+//     // let hashkey = aesutil.maphash(key);
+//     // let hashiv = aesutil.maphash(iv, config.addalgorithm);
 
-// var decryption = aseutil.decryption(encryption, hashkey, hashiv);
-// console.log( "UTF8 plaintext deciphered: " + decryption);
+//     // encryption = aesutil.encryption(data, hashkey, hashiv);
+//     // console.log( "base64 ciphertext: "+ encryption);
+
+//     // let decryption = aesutil.decryption(encryption, hashkey, hashiv);
+//     // // console.log( "UTF8 plaintext deciphered: " + decryption); 
+// })
+
+// readstream.on('close', function () {
+//     data = data.toString();
+//     assert.equal(typeof data, 'string');
+
+//     const key = config.key;
+//     const iv = config.iv;       
+//     let hashkey = aesutil.maphash(key);
+//     let hashiv = aesutil.maphash(iv, config.addalgorithm);
+
+//     encryption = aesutil.encryption(data, hashkey, hashiv);
+//     console.log( "base64 ciphertext: "+ encryption);
+// });

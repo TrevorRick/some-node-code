@@ -1,3 +1,4 @@
+//比较加密算法的时间
 var crypto = require('crypto')
     ,fs = require('fs');
 

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="GBK"?>
+<root>
+ <head>
+  <transcode>T0001</transcode>
+  <transdate>20180308</transdate>
+  <transtime>110230</transtime>
+ </head>
+ <body>
+  <opertype>1</opertype>
+  <name>张三</name>
+  <id>321111111111111113</id>
+  <phone>13888888883</phone>
+  <accno>626666666666663</accno>
+  <note1></note1>
+  <note2></note2>
+ </body>
+</root>
