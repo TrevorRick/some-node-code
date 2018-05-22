@@ -9,38 +9,41 @@ const config = require('../config');
 
 const aesutil = module.exports = {};
 
-aesutil.maphash = function (data, algorithm) {
-    var algorithm = arguments[1] ? arguments[1] : 'sha256'
-    let hash = crypto.createHash(algorithm)
+let maphash = function (data, algorithm) {
+    var algo = algorithm ? algorithm : 'sha256';
+    let hash = crypto.createHash(algo);
     hash.update(data);
     return hash.digest(); //hash.digest([encoding]),The encoding can be 'hex', 'latin1' or 'base64'. 
-                         //If encoding is provided a string will be returned; otherwise a Buffer is returned.
-}
+    //If encoding is provided a string will be returned; otherwise a Buffer is returned.
+};
 
-aesutil.encryption = function (data, key, iv) {
-    console.log('Original cleartext: ' + data);
-    iv = iv || '';
+aesutil.encryption = function (data) {
+    // console.log('Original cleartext: ' + '\n' + data);
+    let key = config.key || '';
+    let iv = config.iv || '';
     let algorithm = config.algorithm,
         clearEncoding = config.clearEncoding,
         cipherEncoding = config.cipherEncoding,
         cipherChunks = [];
-    let cipher = crypto.createCipheriv(algorithm, key, iv);
+    let cipher = crypto.createCipheriv(algorithm, maphash(key), maphash(iv, config.addalgorithm));
     cipherChunks.push(cipher.update(data, clearEncoding, cipherEncoding));
     cipherChunks.push(cipher.final(cipherEncoding));
-    return cipherChunks.join('');
-}
+    return cipherChunks.join('');   
+};
 
-aesutil.decryption = function (cipherChunks, key, iv) {
+aesutil.decryption = function (cipherChunks) {
     if (!cipherChunks) {
-        return "";
+        return '';
     }
-    iv = iv || "";
+    let key = config.key || '';
+    let iv = config.iv || '';
     let algorithm = config.algorithm,
         clearEncoding = config.clearEncoding,
         cipherEncoding = config.cipherEncoding,
         plainChunks = [];
-    let decipher = crypto.createDecipheriv(algorithm, key, iv);
+    let decipher = crypto.createDecipheriv(algorithm, maphash(key), maphash(iv, config.addalgorithm));
     plainChunks.push(decipher.update(cipherChunks, cipherEncoding, clearEncoding));
     plainChunks.push(decipher.final(clearEncoding));
     return plainChunks.join('');
-}
+};
+
