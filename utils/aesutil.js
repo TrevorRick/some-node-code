@@ -17,7 +17,7 @@ let maphash = function (data, algorithm) {
     //If encoding is provided a string will be returned; otherwise a Buffer is returned.
 };
 
-aesutil.encryption = function (data) {
+aesutil.encrypt = function (data) {
     // console.log('Original cleartext: ' + '\n' + data);
     let key = config.key || '';
     let iv = config.iv || '';
@@ -31,7 +31,7 @@ aesutil.encryption = function (data) {
     return cipherChunks.join('');   
 };
 
-aesutil.decryption = function (cipherChunks) {
+aesutil.decrypt = function (cipherChunks) {
     if (!cipherChunks) {
         return '';
     }
