@@ -1,0 +1,136 @@
+/**
+ * 
+ * 1.'data2xml' module:convert a template sourcedata to xml text
+ * 2.'xml-js' module: convert between xml text and json object()
+ * 3.'csvtojson' module: convert a csv data tp json object
+ */
+const assert = require('assert');
+const data2xml = require('data2xml');
+const convert = data2xml({
+    xmlHeader: '<?xml version="1.0" encoding="GBK"?>\n'
+});
+// const parseString = require('xml2js').parseString;
+const xml2js = require('xml-js');
+const path = require('path');
+const csvFilePath = path.resolve(__dirname + '/stocks.csv');
+const csv = require('csvtojson');
+
+let batchno = 18;
+let totalcnt = 41;
+let pagerownum = 10;
+let totalpagenum = Math.ceil(totalcnt / pagerownum);
+let nowpagenum = 1;
+
+let j = 0;
+
+let xml = convert(
+    'root', {
+        head: [{
+            'retcode': '000000',
+            'retmsg': '查询成功'
+        }],
+        body: [{
+            'batchno': `${batchno}`,
+            'totalpagenum': `${totalpagenum}`,
+            'nowpagenum': `${nowpagenum}`,
+            'pagerownum': `${pagerownum}`,
+            'LIST': [{
+                    'workdate': '',
+                    'serialno': '',
+                    'name': '',
+                    'id': '',
+                    'amount': ''
+                },
+                {
+                    'workdate': '',
+                    'serialno': '',
+                    'name': '',
+                    'id': '',
+                    'amount': ''
+                },
+                {
+                    'workdate': '',
+                    'serialno': '',
+                    'name': '',
+                    'id': '',
+                    'amount': ''
+                },
+                {
+                    'workdate': '',
+                    'serialno': '',
+                    'name': '',
+                    'id': '',
+                    'amount': ''
+                },
+                {
+                    'workdate': '',
+                    'serialno': '',
+                    'name': '',
+                    'id': '',
+                    'amount': ''
+                },
+                {
+                    'workdate': '',
+                    'serialno': '',
+                    'name': '',
+                    'id': '',
+                    'amount': ''
+                },
+                {
+                    'workdate': '',
+                    'serialno': '',
+                    'name': '',
+                    'id': '',
+                    'amount': ''
+                },
+                {
+                    'workdate': '',
+                    'serialno': '',
+                    'name': '',
+                    'id': '',
+                    'amount': ''
+                },
+                {
+                    'workdate': '',
+                    'serialno': '',
+                    'name': '',
+                    'id': '',
+                    'amount': ''
+                },
+                {
+                    'workdate': '',
+                    'serialno': '',
+                    'name': '',
+                    'id': '',
+                    'amount': ''
+                },
+            ]
+        }]
+    }
+);
+
+let xml2json = xml2js.xml2json(xml, {
+    compact: true,
+    spaces: 4
+});
+
+json_result = JSON.parse(result);
+
+csv()
+    .fromFile(csvFilePath)
+    .then((jsonObj) => {
+        for (let i = 0; i < jsonObj.length; i++) {
+            if (jsonObj[i].pageno == `${nowpagenum}`) {
+                json_result.root.body.LIST[j].workdate._text = jsonObj[i].workdate;
+                json_result.root.body.LIST[j].serialno._text = jsonObj[i].serialno;
+                json_result.root.body.LIST[j].name._text = jsonObj[i].name;
+                json_result.root.body.LIST[j].id._text = jsonObj[i].id;
+                json_result.root.body.LIST[j].amount._text = jsonObj[i].amount;
+                j++;
+            }
+        }
+        let options = {compact: true, ignoreComment: true, space: 4};
+        let xmlresult = xml2js.json2xml(json_result, options);   // convert a json object to xml text
+        console.log(xmlresult);     
+    });
+
